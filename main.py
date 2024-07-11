@@ -2,7 +2,7 @@ import math
 import numpy as np
 from numpy import asarray
 from PIL import Image
-import random
+import random,csv
 
 # Freddie ;)
 """
@@ -10,14 +10,18 @@ Converts a CSV of image pixels into an array of pixel values
 INPUTS: CSV File name
 RETURNS: 2d array of all the pixel values for each image [[pixels in img 1], [pixels in img 2], ..]
 """
-def CsvToArray():
-  sigmalabels = []
+def CsvToArray(filename="train.csv"):
   data = []
-  with open("train.csv", "r") as file: # Might be good to make the file name a param, and default it to the "train.csv" (I belive there's a programming principle which involves this idea, but I can't remember it!)
-    training_data = file.reader(file)
-    for row in data:
-      sigmalabels.append(row[0])
-      data.append(row[1:])
+  with open(filename, "r") as file: # Might be good to make the file name a param, and default it to the "train.csv" (I belive there's a programming principle which involves this idea, but I can't remember it!)
+    training_data = csv.reader(file)
+    counter = 0 
+    for row in training_data:
+      if counter == 0:
+        sigmalabels = row
+      else:
+        int_row = [int(i) for i in row]
+        data.append(int_row)
+      counter += 1
   return sigmalabels, data
 
 """
@@ -113,8 +117,10 @@ def Train():
   pass
 
 
-def main():
-  ForwardPropagation()
+#def main():
+  #ForwardPropagation()
 
-main()
+#main()
 #pngToArray("colours.png")
+label, data = CsvToArray("mnist_train.csv")
+print(label)
